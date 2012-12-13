@@ -1,0 +1,30 @@
+{
+  "recipes": {
+    "aicache-test:default": "Prints Hello World output"
+  },
+  "groupings": {
+  },
+  "description": "Installs/Configures aicache-test",
+  "attributes": {
+  },
+  "maintainer_email": "roman@aicache.com",
+  "conflicting": {
+  },
+  "license": "All rights reserved",
+  "name": "aicache-test",
+  "suggestions": {
+  },
+  "recommendations": {
+  },
+  "version": "0.1.0",
+  "providing": {
+  },
+  "platforms": {
+  },
+  "maintainer": "aiCache",
+  "dependencies": {
+  },
+  "replacing": {
+  },
+  "long_description": "Description\n===========\n\nRequirements\n============\n\nAttributes\n==========\n\nUsage\n=====\n\n"
+}
