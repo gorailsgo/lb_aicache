@@ -1,30 +1,31 @@
 {
-  "suggestions": {
-  },
-  "long_description": "Description\n===========\n\nRequirements\n============\n\nAttributes\n==========\n\nUsage\n=====\n\n",
-  "attributes": {
-  },
-  "providing": {
-  },
-  "maintainer_email": "roman@aicache.com",
-  "groupings": {
-  },
-  "replacing": {
-  },
-  "description": "Installs/Configures aicache-test",
-  "license": "All rights reserved",
-  "dependencies": {
-  },
-  "platforms": {
-  },
-  "maintainer": "aiCache",
-  "name": "aicache-test",
-  "version": "0.1.0",
   "recipes": {
     "aicache-test::default": "Prints Hello World output"
   },
+  "dependencies": {
+    "rightscale": ">= 0.0.0"
+  },
+  "description": "Installs/Configures aicache-test",
+  "suggestions": {
+  },
+  "replacing": {
+  },
+  "platforms": {
+  },
+  "maintainer_email": "roman@aicache.com",
+  "recommendations": {
+  },
+  "groupings": {
+  },
+  "attributes": {
+  },
+  "long_description": "Description\n===========\n\nRequirements\n============\n\nAttributes\n==========\n\nUsage\n=====\n\n",
+  "name": "aicache-test",
+  "providing": {
+  },
   "conflicting": {
   },
-  "recommendations": {
-  }
+  "license": "All rights reserved",
+  "maintainer": "aiCache",
+  "version": "0.1.0"
 }

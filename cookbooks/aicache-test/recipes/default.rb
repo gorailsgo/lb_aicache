@@ -6,4 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+
+rightscale_marker :begin
 log "Hello from aiCache!"
+rightscale_marker :end
