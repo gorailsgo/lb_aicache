@@ -1,0 +1,30 @@
+{
+  "suggestions": {
+  },
+  "long_description": "Description\n===========\n\nRequirements\n============\n\nAttributes\n==========\n\nUsage\n=====\n\n",
+  "attributes": {
+  },
+  "replacing": {
+  },
+  "providing": {
+  },
+  "name": "about_me",
+  "maintainer_email": "roman@aicache.com",
+  "version": "0.1.0",
+  "dependencies": {
+  },
+  "recipes": {
+    "about_me::default": "Prints my first name and several of my favorite things as output."
+  },
+  "conflicting": {
+  },
+  "recommendations": {
+  },
+  "platforms": {
+  },
+  "description": "Simple about_me recipe",
+  "groupings": {
+  },
+  "license": "All rights reserved",
+  "maintainer": "aiCache"
+}
