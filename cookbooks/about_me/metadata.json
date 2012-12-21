@@ -1,30 +1,43 @@
 {
-  "suggestions": {
-  },
-  "long_description": "Description\n===========\n\nRequirements\n============\n\nAttributes\n==========\n\nUsage\n=====\n\n",
-  "attributes": {
-  },
-  "replacing": {
-  },
-  "providing": {
-  },
-  "name": "about_me",
-  "maintainer_email": "roman@aicache.com",
   "version": "0.1.0",
-  "dependencies": {
-  },
-  "recipes": {
-    "about_me::default": "Prints my first name and several of my favorite things as output."
-  },
-  "conflicting": {
-  },
   "recommendations": {
   },
   "platforms": {
   },
+  "maintainer_email": "roman@aicache.com",
+  "maintainer": "aiCache",
+  "long_description": "Description\n===========\n\nRequirements\n============\n\nAttributes\n==========\n\nUsage\n=====\n\n",
+  "providing": {
+  },
+  "license": "All rights reserved",
+  "conflicting": {
+  },
+  "recipes": {
+    "about_me::default": "Prints my first name and several of my favorite things as output."
+  },
+  "attributes": {
+    "about_me/favorite/hobby": {
+      "display_name": "Hobby",
+      "choice": [
+
+      ],
+      "required": "required",
+      "recipes": [
+        "about_me::default"
+      ],
+      "description": "My favorite hobby.",
+      "type": "string",
+      "calculated": false
+    }
+  },
+  "suggestions": {
+  },
+  "dependencies": {
+  },
+  "replacing": {
+  },
   "description": "Simple about_me recipe",
   "groupings": {
   },
-  "license": "All rights reserved",
-  "maintainer": "aiCache"
+  "name": "about_me"
 }
