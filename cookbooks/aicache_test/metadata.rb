@@ -7,4 +7,4 @@ version          "0.1.0"
 
 depends "rightscale"
 
-recipe "aicache_test::default","Prints Hello World output"
+recipe "aicache_test::default","installs aicache"

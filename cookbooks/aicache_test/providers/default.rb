@@ -1,18 +1,12 @@
 #
-# Cookbook Name:: aicache-test
-# Recipe:: default
-#
-# Copyright 2012, YOUR_COMPANY_NAME
-#
-# All rights reserved - Do Not Redistribute
+# Cookbook Name:: lb_aicache
 #
 
 include RightScale::LB::Helper
 
-rightscale_marker :begin
+action :install do
 
-log "Installing aiCache"
-
+  log "  Installing aiCache"
 
   # Installs aicache package.
   bash "install_aicache" do
@@ -30,5 +24,4 @@ log "Installing aiCache"
     EOH
   end
 
-rightscale_marker :end
-
+end

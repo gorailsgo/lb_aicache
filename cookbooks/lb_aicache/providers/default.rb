@@ -22,7 +22,7 @@ action :install do
     mkdir /etc/aicache
     mv /usr/local/aicache/*.cfg /etc/aicache
     EOH
-  
+  end
   # Creates haproxy service.
   service "aicache" do
     supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
