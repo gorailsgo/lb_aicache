@@ -7,8 +7,6 @@
 # All rights reserved - Do Not Redistribute
 #
 
-include RightScale::LB::Helper
-
 rightscale_marker :begin
 
 log "Installing aiCache"
