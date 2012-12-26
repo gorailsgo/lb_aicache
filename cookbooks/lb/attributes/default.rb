@@ -19,10 +19,7 @@ set_unless[:lb][:bind_port] = 80
 set_unless[:lb][:health_check_uri] = "/"
 # URI that the load balancer uses to publish its status.
 set_unless[:lb][:stats_uri] = "/accelstattext"
-# Username required to access to the haproxy stats page.
-# set_unless[:lb][:stats_user] = ""
-# Password required to access to the haproxy stats page.
-# set_unless[:lb][:stats_password] = ""
+
 set_unless[:lb][:vhost_port] = ""
 set_unless[:lb][:session_stickiness] = ""
 set_unless[:lb][:max_conn_per_server] = "500"
