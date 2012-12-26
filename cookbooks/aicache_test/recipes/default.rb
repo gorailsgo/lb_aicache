@@ -13,12 +13,12 @@ log "Installing aiCache"
 
   # Installs aicache package.
   bash "install_aicache" do
-    aiInstallDir = "/usr/local/aicache"
-    aiConfigDir = "/etc/aicache"
-    aiURL = "http://aicache.com/aicache.tar"
     user "root"
     cwd "/tmp"
     code <<-EOH
+    aiInstallDir = "/usr/local/aicache"
+    aiConfigDir = "/etc/aicache"
+    aiURL = "http://aicache.com/aicache.tar"
     wget $aiURL
     tar -xf aicache.tar
     cd aicache
