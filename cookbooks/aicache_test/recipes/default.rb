@@ -11,7 +11,6 @@ rightscale_marker :begin
 
 log "Installing aiCache"
 
-
   # Installs aicache package.
   bash "install_aicache" do
     user "root"
