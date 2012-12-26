@@ -16,9 +16,9 @@ log "Installing aiCache"
     user "root"
     cwd "/tmp"
     code <<-EOH
-    aiInstallDir = "/usr/local/aicache"
-    aiConfigDir = "/etc/aicache"
-    aiURL = "http://aicache.com/aicache.tar"
+    aiInstallDir="/usr/local/aicache"
+    aiConfigDir="/etc/aicache"
+    aiURL="http://aicache.com/aicache.tar"
     wget $aiURL
     tar -xf aicache.tar
     cd aicache
