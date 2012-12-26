@@ -1,64 +1,71 @@
 # 
-# Cookbook Name:: lb_haproxy
+# Cookbook Name:: lb_aicache
 #
-# Copyright RightScale, Inc. All rights reserved.  All access and use subject to the
-# RightScale Terms of Service available at http://www.rightscale.com/terms.php and,
-# if applicable, other agreements such as a RightScale Master Subscription Agreement.
 
 include RightScale::LB::Helper
 
 action :install do
 
-  log "  Installing haproxy"
+  log "  Installing aiCache"
 
-  # Installs haproxy package.
-  package "haproxy" do
-    action :install
-  end
-
+  # Installs aicache package.
+  bash "install_aicache" do
+    user "root"
+    cwd "/tmp"
+    code <<-EOH
+    wget http://aicache.com/aicache.tar
+    tar -xf aicache.tar
+    cd aicache
+    chmod +x install.sh
+    ./install.sh
+    chmod +x /usr/local/aicache/*.sh
+    mkdir /etc/aicache
+    mv /usr/local/aicache/*.cfg /etc/aicache
+    EOH
+  
   # Creates haproxy service.
-  service "haproxy" do
+  service "aicache" do
     supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
     action :enable
   end
 
-  # Installs haproxy config file depending on platform.
-  template "/etc/default/haproxy" do
+  # Installs aiCache config file depending on platform.
+  template "/etc/aicache/example.cfg" do
     only_if { node[:platform] == "ubuntu" }
     source "default_haproxy.erb"
-    cookbook "lb_haproxy"
+    cookbook "lb_aicache"
     owner "root"
-    notifies :restart, resources(:service => "haproxy")
+    notifies :restart, resources(:service => "aicache")
   end
 
-  # Creates /etc/haproxy directory.
-  directory "/etc/haproxy/#{node[:lb][:service][:provider]}.d" do
-    owner "haproxy"
-    group "haproxy"
+  # Creates /etc/aicache directory.
+  directory "/etc/aicache/#{node[:lb][:service][:provider]}.d" do
+    owner "aicache"
+    group "aicache"
     mode 0755
     recursive true
     action :create
   end
 
-  # Installs script that concatenates individual server files after the haproxy
-  # config head into the haproxy config.
-  cookbook_file "/etc/haproxy/haproxy-cat.sh" do
-    owner "haproxy"
-    group "haproxy"
+  # Installs script that concatenates individual server files after the aicache
+  # config head into the aicache config.
+  cookbook_file "/etc/aicache/aicache-cat.sh" do
+    owner "aicache"
+    group "aicache"
     mode 0755
-    source "haproxy-cat.sh"
-    cookbook "lb_haproxy"
+    source "aicache-cat.sh"
+    cookbook "lb_aicache"
   end
 
-  # Installs the haproxy config head which is the part of the haproxy config
+  # Installs the aicache config head which is the part of the aicache config
   # that doesn't change.
-  template "/etc/haproxy/haproxy.cfg.head" do
-    source "haproxy.cfg.head.erb"
-    cookbook "lb_haproxy"
-    owner "haproxy"
-    group "haproxy"
+  template "/etc/aicache/aicache.cfg.head" do
+    source "aicache.cfg.head.erb"
+    cookbook "lb_aicache"
+    owner "aicache"
+    group "aicache"
     mode "0400"
-    stats_file="stats socket /etc/haproxy/status user haproxy group haproxy"
+    stats_file="/var/log/aicache/stats-global user aicache group aicache"
     variables(
       :stats_file_line => stats_file,
       :timeout_client => node[:lb_haproxy][:timeout_client]
@@ -66,13 +73,13 @@ action :install do
   end
 
 
-  # Installs the haproxy config backend which is the part of the haproxy config
+  # Installs the aicache config backend which is the part of the aicache config
   # that doesn't change.
-  template "/etc/haproxy/haproxy.cfg.default_backend" do
-    source "haproxy.cfg.default_backend.erb"
-    cookbook "lb_haproxy"
-    owner "haproxy"
-    group "haproxy"
+  template "/etc/aicache/aicache.cfg.default_backend" do
+    source "aicache.cfg.default_backend.erb"
+    cookbook "lb_aicache"
+    owner "aicache"
+    group "aicache"
     mode "0400"
     backup false
     variables(
@@ -80,12 +87,12 @@ action :install do
     )
   end
 
-  # Generates the haproxy config file.
-  execute "/etc/haproxy/haproxy-cat.sh" do
-    user "haproxy"
-    group "haproxy"
+  # Generates the aicache config file.
+  execute "/etc/aicache/aicache-cat.sh" do
+    user "aicache"
+    group "aicache"
     umask 0077
-    notifies :start, resources(:service => "haproxy")
+    notifies :start, resources(:service => "aicache")
   end
 end
 
@@ -95,43 +102,43 @@ action :add_vhost do
   pool_name = new_resource.pool_name
 
   # Creates the directory for vhost server files.
-  directory "/etc/haproxy/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
-    owner "haproxy"
-    group "haproxy"
+  directory "/etc/aicache/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
+    owner "aicache"
+    group "aicache"
     mode 0755
     recursive true
     action :create
   end
 
   # Adds current pool to pool_list conf to preserve lb/pools order
-  template "/etc/haproxy/#{node[:lb][:service][:provider]}.d/pool_list.conf" do
-     source "haproxy_backend_list.erb"
-     owner "haproxy"
-     group "haproxy"
+  template "/etc/aicache/#{node[:lb][:service][:provider]}.d/pool_list.conf" do
+     source "aicache_backend_list.erb"
+     owner "aicache"
+     group "aicache"
      mode 0600
      backup false
-     cookbook "lb_haproxy"
+     cookbook "lb_aicache"
      variables(
        :pool_list => node[:lb][:pools]
      )
   end
 
-  # See cookbooks/lb_haproxy/definitions/haproxy_backend.rb for the definition
-  # of "lb_haproxy_backend".
-  lb_haproxy_backend  "create main backend section" do
+  # See cookbooks/lb_aicache/definitions/aicache_backend.rb for the definition
+  # of "lb_aicache_backend".
+  lb_aicache_backend  "create main backend section" do
     pool_name  pool_name
   end
 
   # Calls the "advanced_configs" action.
   action_advanced_configs
 
-  # (Re)generates the haproxy config file.
-  execute "/etc/haproxy/haproxy-cat.sh" do
-    user "haproxy"
-    group "haproxy"
+  # (Re)generates the aicache config file.
+  execute "/etc/aicache/aicache-cat.sh" do
+    user "aicache"
+    group "aicache"
     umask 0077
     action :run
-    notifies :reload, resources(:service => "haproxy")
+    notifies :reload, resources(:service => "aicache")
   end
 
   # Tags this server as a load balancer for vhost it will answer for so app servers
@@ -148,38 +155,38 @@ action :attach do
 
   log "  Attaching #{new_resource.backend_id} / #{new_resource.backend_ip} / #{pool_name}"
 
-  # Creates haproxy service.
-  service "haproxy" do
+  # Creates aicache service.
+  service "aicache" do
     supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
     action :nothing
   end
 
   # Creates the directory for vhost server files.
-  directory "/etc/haproxy/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
-    owner "haproxy"
-    group "haproxy"
+  directory "/etc/aicache/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
+    owner "aicache"
+    group "aicache"
     mode 0755
     recursive true
     action :create
   end
 
-  # (Re)generates the haproxy config file.
-  execute "/etc/haproxy/haproxy-cat.sh" do
-    user "haproxy"
-    group "haproxy"
+  # (Re)generates the aicache config file.
+  execute "/etc/aicache/aicache-cat.sh" do
+    user "aicache"
+    group "aicache"
     umask 0077
     action :nothing
-    notifies :reload, resources(:service => "haproxy")
+    notifies :reload, resources(:service => "aicache")
   end
 
   # Creates an individual server file for each vhost and notifies the concatenation script if necessary.
-  template ::File.join("/etc/haproxy/#{node[:lb][:service][:provider]}.d", pool_name, new_resource.backend_id) do
-    source "haproxy_server.erb"
-    owner "haproxy"
-    group "haproxy"
+  template ::File.join("/etc/aicache/#{node[:lb][:service][:provider]}.d", pool_name, new_resource.backend_id) do
+    source "aicache_server.erb"
+    owner "aicache"
+    group "aicache"
     mode 0600
     backup false
-    cookbook "lb_haproxy"
+    cookbook "lb_aicache"
     variables(
       :backend_name => new_resource.backend_id,
       :backend_ip => new_resource.backend_ip,
@@ -188,14 +195,14 @@ action :attach do
       :session_sticky => new_resource.session_sticky,
       :health_check_uri => node[:lb][:health_check_uri]
     )
-    notifies :run, resources(:execute => "/etc/haproxy/haproxy-cat.sh")
+    notifies :run, resources(:execute => "/etc/aicache/aicache-cat.sh")
   end
 end
 
 action :advanced_configs do
 
-  # Creates haproxy service.
-  service "haproxy" do
+  # Creates aicache service.
+  service "aicache" do
     supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
     action :nothing
   end
@@ -205,33 +212,33 @@ action :advanced_configs do
   log "  Current pool name is #{pool_name}"
   log "  Current FULL pool name is #{pool_name_full}"
 
-  # Template to generate acl sections for haproxy config file
+  # Template to generate acl sections for aicache config file
   # RESULT EXAMPLE
   # acl url_serverid  path_beg    /serverid
   # acl ns-ss-db1-test-rightscale-com_acl  hdr_dom(host) -i ns-ss-db1.test.rightscale.com
-  template "/etc/haproxy/#{node[:lb][:service][:provider]}.d/acl_#{pool_name}.conf" do
-     source "haproxy_backend_acl.erb"
-     owner "haproxy"
-     group "haproxy"
+  template "/etc/aicache/#{node[:lb][:service][:provider]}.d/acl_#{pool_name}.conf" do
+     source "aicache_backend_acl.erb"
+     owner "aicache"
+     group "aicache"
      mode 0600
      backup false
-     cookbook "lb_haproxy"
+     cookbook "lb_aicache"
      variables(
        :pool_name => pool_name,
        :pool_name_full => pool_name_full
      )
   end
 
-  # Template to generate acl sections for haproxy config file
+  # Template to generate acl sections for aicache config file
   # RESULT EXAMPLE
   # use_backend 2_backend if url_serverid
-  template "/etc/haproxy/#{node[:lb][:service][:provider]}.d/use_backend_#{pool_name}.conf" do
-    source "haproxy_backend_use.erb"
-    owner "haproxy"
-    group "haproxy"
+  template "/etc/aicache/#{node[:lb][:service][:provider]}.d/use_backend_#{pool_name}.conf" do
+    source "aicache_backend_use.erb"
+    owner "aicache"
+    group "aicache"
     mode 0600
     backup false
-    cookbook "lb_haproxy"
+    cookbook "lb_aicache"
     variables(
       :pool_name => pool_name,
       :pool_name_full => pool_name_full
@@ -270,26 +277,26 @@ action :detach do
 
   log "  Detaching #{backend_id} from #{pool_name}"
 
-  # Creates haproxy service.
-  service "haproxy" do
+  # Creates aicache service.
+  service "aicache" do
     supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
     action :nothing
   end
 
-  # (Re)generates the haproxy config file.
-  execute "/etc/haproxy/haproxy-cat.sh" do
-    user "haproxy"
-    group "haproxy"
+  # (Re)generates the aicache config file.
+  execute "/etc/aicache/aicache-cat.sh" do
+    user "aicache"
+    group "aicache"
     umask 0077
     action :nothing
-    notifies :reload, resources(:service => "haproxy")
+    notifies :reload, resources(:service => "aicache")
   end
 
   # Deletes the individual server file and notifies the concatenation script if necessary.
-  file ::File.join("/etc/haproxy/#{node[:lb][:service][:provider]}.d", pool_name, backend_id) do
+  file ::File.join("/etc/aicache/#{node[:lb][:service][:provider]}.d", pool_name, backend_id) do
     action :delete
     backup false
-    notifies :run, resources(:execute => "/etc/haproxy/haproxy-cat.sh")
+    notifies :run, resources(:execute => "/etc/aicache/aicache-cat.sh")
   end
 
 end
@@ -317,32 +324,32 @@ end
 
 action :setup_monitoring do
 
-  log "  Setup monitoring for haproxy"
+  log "  Setup monitoring for aicache"
 
-  # Installs the haproxy collectd script into the collectd library plugins directory.
-  cookbook_file(::File.join(node[:rightscale][:collectd_lib], "plugins", "haproxy")) do
-    source "haproxy1.4.rb"
-    cookbook "lb_haproxy"
+  # Installs the aicache collectd script into the collectd library plugins directory.
+  cookbook_file(::File.join(node[:rightscale][:collectd_lib], "plugins", "aicache")) do
+    source "aicache1.4.rb"
+    cookbook "lb_aicache"
     mode "0755"
   end
 
-  # Adds a collectd config file for the haproxy collectd script with the exec plugin and restart collectd if necessary.
-  template ::File.join(node[:rightscale][:collectd_plugin_dir], "haproxy.conf") do
+  # Adds a collectd config file for the aicache collectd script with the exec plugin and restart collectd if necessary.
+  template ::File.join(node[:rightscale][:collectd_plugin_dir], "aicache.conf") do
     backup false
-    source "haproxy_collectd_exec.erb"
+    source "aicache_collectd_exec.erb"
     notifies :restart, resources(:service => "collectd")
-    cookbook "lb_haproxy"
+    cookbook "lb_aicache"
   end
 
   ruby_block "add_collectd_gauges" do
     block do
       types_file = ::File.join(node[:rightscale][:collectd_share], "types.db")
       typesdb = IO.read(types_file)
-      unless typesdb.include?("gague-age") && typesdb.include?("haproxy_sessions")
+      unless typesdb.include?("gague-age") && typesdb.include?("aicache_sessions")
         typesdb += <<-EOS
-          haproxy_sessions current_queued:GAUGE:0:65535, current_session:GAUGE:0:65535
-          haproxy_traffic cumulative_requests:COUNTER:0:200000000, response_errors:COUNTER:0:200000000, health_check_errors:COUNTER:0:200000000
-          haproxy_status status:GAUGE:-255:255
+          aicache_sessions current_queued:GAUGE:0:65535, current_session:GAUGE:0:65535
+          aicache_traffic cumulative_requests:COUNTER:0:200000000, response_errors:COUNTER:0:200000000, health_check_errors:COUNTER:0:200000000
+          aicache_status status:GAUGE:-255:255
         EOS
         ::File.open(types_file, "w") { |f| f.write(typesdb) }
       end
@@ -354,7 +361,7 @@ end
 
 action :restart do
 
-  log "  Restarting haproxy"
+  log "  Restarting aicache"
 
   require 'timeout'
 

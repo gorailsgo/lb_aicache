@@ -1,9 +1,6 @@
 #
 # Cookbook Name:: lb
 #
-# Copyright RightScale, Inc. All rights reserved.  All access and use subject to the
-# RightScale Terms of Service available at http://www.rightscale.com/terms.php and,
-# if applicable, other agreements such as a RightScale Master Subscription Agreement.
 
 module RightScale
   module LB
@@ -15,11 +12,11 @@ module RightScale
       #
       def get_attached_servers(pool_name)
         attached_servers = Set.new
-        haproxy_d = "/etc/haproxy/#{node[:lb][:service][:provider]}.d/#{pool_name}"
-        Dir.entries(haproxy_d).select do |file|
+        aicache_d = "/etc/aicache/#{node[:lb][:service][:provider]}.d/#{pool_name}"
+        Dir.entries(aicache_d).select do |file|
           next if file == "." or file == ".."
           attached_servers.add?(file)
-        end if (::File.directory?(haproxy_d))
+        end if (::File.directory?(aicache_d))
 
         attached_servers
       end

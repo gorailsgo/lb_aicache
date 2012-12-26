@@ -1,9 +1,6 @@
 #
 # Cookbook Name:: lb
 #
-# Copyright RightScale, Inc. All rights reserved.  All access and use subject to the
-# RightScale Terms of Service available at http://www.rightscale.com/terms.php and,
-# if applicable, other agreements such as a RightScale Master Subscription Agreement.
 
 rightscale_marker :begin
 
@@ -13,9 +10,9 @@ end
 
 POOL_NAMES = node[:lb][:pools]
 
-log "  Install load balancer"
+log "  Install aiCache load balancer"
 
-# Installs haproxy and creates main config files.
+# Installs aiCache and creates main config files.
 # Name passed in the "install" action acts as the default backend.
 # Currently, it uses the last item from lb/pools as the default backend.
 # See cookbooks/lb_<provider>/providers/default.rb for the "install" action.

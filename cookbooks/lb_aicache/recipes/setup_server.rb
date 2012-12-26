@@ -11,8 +11,8 @@ class Chef::Recipe
   include RightScale::App::Helper
 end
 
-log "  Override load balancer to use HAProxy."
-node[:lb][:service][:provider] = "lb_haproxy"
+log "  Override load balancer to use aiCache."
+node[:lb][:service][:provider] = "lb_aicache"
 
 # 2D array of pools
 # Example: [["_serverid", "/serverid"], ["_appsever", "/appsever"], ["default", "default"]]
@@ -24,7 +24,7 @@ pool_list.each do |pool_name_short, pool_name_full|
 
   # See cookbooks/lb/resources/default.rb for the "lb" resource.
   lb pool_name_short do
-    provider "lb_haproxy"
+    provider "lb_aicache"
     pool_name_full pool_name_full
     persist true # Stores this resource in node between converges.
     action :nothing
