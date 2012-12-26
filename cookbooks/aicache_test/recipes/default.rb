@@ -21,6 +21,7 @@ log "Installing aiCache"
     cd aicache
     chmod +x install.sh
     ./install.sh
+    mv /usr/local/aicache/aicache_https /usr/local/aicache/aicache
     chmod +x /usr/local/aicache/*.sh
     mkdir /etc/aicache
     mv /usr/local/aicache/*.cfg /etc/aicache
