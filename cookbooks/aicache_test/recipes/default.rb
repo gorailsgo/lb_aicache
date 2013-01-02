@@ -11,7 +11,7 @@ rightscale_marker :begin
 
 log "Installing aiCache"
 
-  # Installs aicache package.
+  # Install aiCache software.
   bash "install_aicache" do
     user "root"
     cwd "/tmp"
@@ -30,6 +30,13 @@ log "Installing aiCache"
     mv $aiInstallDir/*.cfg $aiConfigDir
     EOH
   end
+
+  # Install aiCache start/stop/restart script
+  service "aicache" do
+    supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
+    action :enable
+  end
+
 
 rightscale_marker :end
 
