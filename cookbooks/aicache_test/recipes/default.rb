@@ -11,6 +11,14 @@ rightscale_marker :begin
 
 log "Installing aiCache"
 
+  # Install OpenSSL dependencies
+  package "openssl" do
+    action :install
+  end
+  package "openssl-devel" do
+    action :install
+  end
+
   # Install aiCache software.
   bash "install_aicache" do
     user "root"
@@ -32,11 +40,14 @@ log "Installing aiCache"
   end
 
   # Install aiCache start/stop/restart script
+  template "/etc/init.d/aicache" do
+    source "aicache_restart.sh.erb"
+  end
+
   service "aicache" do
     supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
     action :enable
   end
-
 
 rightscale_marker :end
 
