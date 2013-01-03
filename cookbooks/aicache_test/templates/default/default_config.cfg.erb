@@ -1,0 +1,94 @@
+#########################################################################################################
+# aiCache Configuration file template for RightScale
+#########################################################################################################
+#
+server # DON'T REMOVE OR MODIFY THIS LINE
+#
+server_ip *                      # DEFAULT: we listen on all IPs/NICs defined on this host
+server_port 80                   # DEFAULT: we run on default HTTP port 80
+
+if_name eth0                     # MUST POINT TO VALID Interface name that you used to obtain the license
+
+username aicache                 # Will run as this user, must be a valid user
+groupname aicache                # Will run as this group, must be a valid group
+
+
+logdirectory /var/log/aicache    # Log directory: access, error, stats, snmp.stat go there
+stay_up_on_write_error           # When set, server will continue to service requests even when it runs
+                                 # out of space in log partition (directory).
+drop_user_agent                  # Do not log user-agent information
+log_healthcheck                  # Will log health check requests
+logstats                         # Log global statistics
+max_log_file_size 100000000      # Auto-rotate logs when it grows above 100 Mb
+
+
+maxkeepalivereq 20               # Max # of keep-alive requests per client keep-alive connection
+maxkeepalivetime 10              # Max lifespan of client keep-alive connection, seconds
+maxclientidletime 4              # Max idle time of client keep-alive connection, seconds
+maxosidletime 4                  # Origin Server connection max idle time
+
+snmp_stat_interval 4             # SNMP stats refresh interval, seconds
+
+max_os_ka_conn 2                 # Max number of origin server keep-alive connections, per origin server
+max_os_ka_req 20                 # Max number of origin server requests per os keep-alive connection
+
+# Alerts
+alert_req_sec_max 2500           # Max number of requests per second, more will generate alert
+alert_req_sec_min 0              # Min number of requests per second, less will generate alert
+alert_bad_resp_sec 2             # Max bad responses (404, 500, etc...) from origin servers per second
+alert_os_rt 200                  # Alert on origin response time (miliseconds)
+
+alert_dir /usr/local/aicache/alerts # Required for rightscale alerts
+alert_email root@localhost       # Requered for rightscale alerts
+
+
+# Uncomment following lines if you want to use aiCache to block DDOS attack
+#clip_throttle                   # Enable clip throttle
+#block_ip_interval 10
+#block_ip_max_req 100
+#silent_block_ip
+
+
+#########################################################################################################
+# Website
+#########################################################################################################
+#
+website  # DON'T REMOVE OR MODIFY THIS LINE
+#
+
+hostname google.com             # MUST CHANGE to your own hostname
+cname EC2_PUBLIC_HOSTNAME        # Will be replaced with EC2 instance public hostname. Useful for quick testing
+
+min_gzip_size 4000               # Will compress compressible responses over 4000 bytes in size
+fallback                         # Will fall back to prev cached response if new one can not be obtained
+logstats                         # Will log basic website stats to a dedicated stats log file
+
+healthcheck / HTTP 10 7  # Will request /test.html every 5 seconds, match response to "HTTP", timeout 4 seconds
+
+#########################################################################################################
+# HTTP Headers. Do not modify without a very good reason.
+#########################################################################################################
+httpheaderder Connection keep-alive
+httpheader Accept */*
+httpheader Accept-Encoding gzip
+
+#########################################################################################################
+# Patterns: this is what sets up Time-to-Live (caching rules)
+#########################################################################################################
+pattern /$      regexp 1m        # cache for 1 minute: "/", "/news/" etc
+pattern \.html$ regexp 1m        # cache for 1 minute
+#pattern \.jsp  regexp 1m        # cache for 1 minute - dynamic content, must use caution
+#pattern \.php  regexp 1m        # cache for 1 minute - must use caution
+#pattern \.asp  regexp 1m        # cache for 1 minute - must use caution
+#pattern \.asx  regexp 1m        # cache for 1 minute - must use caution
+pattern .js   simple 7d no_log   # cache for a week, do not log in acces log file
+pattern .css  simple 7d no_log   # cache for a week, do not log in acces log file
+pattern .jpg  simple 7d no_log   # cache for a week, do not log in acces log file
+pattern .gif  simple 7d no_log   # cache for a week, do not log in acces log file
+pattern .png  simple 7d no_log   # cache for a week, do not log in acces log file
+
+#########################################################################################################
+# Origins. At least one must be defined
+#########################################################################################################
+origin 74.125.67.100 80          # Google server as testing origin
+
