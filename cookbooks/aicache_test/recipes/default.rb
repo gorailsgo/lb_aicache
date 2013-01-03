@@ -54,8 +54,6 @@ log "Installing aiCache"
     mv $aiInstallDir/aicache_https $aiInstallDir/aicache
     chmod +x $aiInstallDir/*.sh
     mkdir $aiConfigDir
-    ln -s /lib64/libssl.so.0.9.8e /lib64/libssl.so.0.9.8
-    ln -s /lib64/libcrypto.so.0.9.8e /lib64/libcrypto.so.0.9.8
     EOH
   end
 
