@@ -27,7 +27,7 @@ log "Installing aiCache"
     wget http://ftp.gnome.org/pub/gnome/sources/glib/2.35/glib-2.35.3.tar.xz
     unxz glib-2.35.3.tar.xz
     tar -xf glib-2.35.3.tar
-    cd glib-2.35.3.tar
+    cd glib-2.35.3
     ./configure
     make -j 4
     make -j 4 install
