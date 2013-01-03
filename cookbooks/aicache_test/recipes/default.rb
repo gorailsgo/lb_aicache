@@ -12,15 +12,19 @@ rightscale_marker :begin
 log "Installing aiCache"
 
   # Install OpenSSL dependencies
-  package "openssl" do
-    action :install
-  end
+#  package "openssl" do
+#    action :install
+#  end
   package "openssl-devel" do
     action :install
   end
-
+  
   # Install glib dependency
-  bash "install_aicache" do
+  package "libffi-devel" do
+    action :install
+  end
+  
+  bash "install_glib" do
     user "root"
     cwd "/tmp"
     code <<-EOH
