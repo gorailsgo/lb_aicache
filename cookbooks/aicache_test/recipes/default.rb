@@ -19,6 +19,21 @@ log "Installing aiCache"
     action :install
   end
 
+  # Install glib dependency
+  bash "install_aicache" do
+    user "root"
+    cwd "/tmp"
+    code <<-EOH
+    wget http://ftp.gnome.org/pub/gnome/sources/glib/2.35/glib-2.35.3.tar.xz
+    unxz glib-2.35.3.tar.xz
+    tar -xf glib-2.35.3.tar
+    cd glib-2.35.3.tar
+    ./configure
+    make -j 4
+    make -j 4 install
+    EOH
+  end
+
   # Install aiCache software.
   bash "install_aicache" do
     user "root"
