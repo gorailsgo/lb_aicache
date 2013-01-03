@@ -26,7 +26,6 @@ start)
         ulimit -n 65535
         $DAEMON_FULL $DAEMONOPTS
         PID=`pgrep -f $DAEMON_FULL`
-        #echo "Saving PID" $PID " to " $PIDFILE
         if [ -z $PID ]; then
             printf "%s\n" "Fail"
         else
