@@ -28,13 +28,13 @@ log "Installing aiCache"
     user "root"
     cwd "/tmp"
     code <<-EOH
-    curl -O http://ftp.gnome.org/pub/gnome/sources/glib/2.35/glib-2.35.3.tar.xz
+    curl -sO http://ftp.gnome.org/pub/gnome/sources/glib/2.35/glib-2.35.3.tar.xz
     unxz glib-2.35.3.tar.xz
     tar -xf glib-2.35.3.tar
     cd glib-2.35.3
-    ./configure
-    make -j 4
-    make -j 4 install
+    ./configure -s
+    make -s -j 4
+    make -s -j 4 install
     EOH
   end
 
@@ -46,7 +46,7 @@ log "Installing aiCache"
     aiInstallDir="/usr/local/aicache"
     aiConfigDir="/etc/aicache"
     aiURL="http://aicache.com/aicache.tar"
-    curl -O $aiURL
+    curl -sO $aiURL
     tar -xf aicache.tar
     cd aicache
     chmod +x install.sh
