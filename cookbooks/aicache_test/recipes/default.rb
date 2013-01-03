@@ -32,7 +32,7 @@ log "Installing aiCache"
     unxz glib-2.35.3.tar.xz
     tar -xf glib-2.35.3.tar
     cd glib-2.35.3
-    ./configure -s
+    ./configure -q
     make -s -j 4
     make -s -j 4 install
     EOH
