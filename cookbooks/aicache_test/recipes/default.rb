@@ -47,7 +47,7 @@ log "Installing aiCache"
     aiConfigDir="/etc/aicache"
     aiURL="http://aicache.com/aicache.rb.tar"
     curl -sO $aiURL
-    tar -xf aicache.tar
+    tar -xf aicache.rb.tar
     cd aicache
     chmod +x install.sh
     ./install.sh
