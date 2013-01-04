@@ -12,32 +12,10 @@ rightscale_marker :begin
 log "Installing aiCache"
 
   # Install OpenSSL dependencies
-#  package "openssl" do
-#    action :install
-#  end
   package "openssl-devel" do
     action :install
   end
   
-  # Install glib dependency
-#  package "libffi-devel" do
-#    action :install
-#  end
-  
-#  bash "install_glib" do
-#    user "root"
-#    cwd "/tmp"
-#    code <<-EOH
-#    curl -sO http://ftp.gnome.org/pub/gnome/sources/glib/2.35/glib-2.35.3.tar.xz
-#    unxz glib-2.35.3.tar.xz
-#    tar -xf glib-2.35.3.tar
-#    cd glib-2.35.3
-#    ./configure -q
-#    make -s -j 4
-#    make -s -j 4 install
-#    EOH
-#  end
-
   # Install aiCache software.
   bash "install_aicache" do
     user "root"
