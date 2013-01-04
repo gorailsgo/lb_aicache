@@ -40,7 +40,7 @@ log "Installing aiCache"
     owner "aicache"
     group "aicache"
     mode "755"
-    source "default_config.cfg.erb"
+    source "aicache.cfg.default.erb"
   end
   
   # Create reload files for aicache 
