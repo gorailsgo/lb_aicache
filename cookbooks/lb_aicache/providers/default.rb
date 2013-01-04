@@ -6,50 +6,65 @@ include RightScale::LB::Helper
 
 action :install do
 
-  log "  Installing aiCache"
+log "Installing aiCache"
 
-  # Installs aicache package.
+  # Install OpenSSL dependencies
+  package "openssl-devel" do
+    action :install
+  end
+
+  # Install aiCache software.
   bash "install_aicache" do
     user "root"
     cwd "/tmp"
     code <<-EOH
     aiInstallDir="/usr/local/aicache"
-    aiConfigDir="/etc/aicache"
-    aiURL="http://aicache.com/aicache.tar"
-    wget $aiURL
-    tar -xf aicache.tar
+    aiURL="http://aicache.com/aicache.rb.tar"
+    curl -sO $aiURL
+    tar -xf aicache.rb.tar
     cd aicache
     chmod +x install.sh
     ./install.sh
     mv $aiInstallDir/aicache_https $aiInstallDir/aicache
     chmod +x $aiInstallDir/*.sh
-    mkdir $aiConfigDir
-    mv $aiInstallDir/*.cfg $aiConfigDir
     EOH
   end
 
-  # Creates aicache service.
-  service "aicache" do
-    supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
-    action :enable
-  end
-
-  # Installs aiCache config file depending on platform.
-  template "/etc/aicache/example.cfg" do
-    only_if { node[:platform] == "ubuntu" }
-    source "default_haproxy.erb"
-    cookbook "lb_aicache"
-    owner "root"
-    notifies :restart, resources(:service => "aicache")
-  end
-
   # Creates /etc/aicache directory.
+  directory "/etc/aicache" do
+    owner "aicache"
+    group "aicache"
+    mode 0755
+    recursive true
+    action :create
+  end
+
+  # Creates /etc/aicache/node.d directory.
   directory "/etc/aicache/#{node[:lb][:service][:provider]}.d" do
     owner "aicache"
     group "aicache"
     mode 0755
     recursive true
     action :create
+  end
+
+  # Install aiCache default config
+  template "/etc/aicache/aicache.cfg" do
+    source "default_config.cfg.erb"
+    cookbook "lb_aicache"
+    owner "aicache"
+    notifies :restart, resources(:service => "aicache")
+  end
+
+  # Install aiCache start/stop/restart script
+  template "/etc/init.d/aicache" do
+    source "aicache_restart.sh.erb"
+    mode "0755"
+  end
+
+  service "aicache" do
+    supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
+    action :enable
   end
 
   # Installs script that concatenates individual server files after the aicache
