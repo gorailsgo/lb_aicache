@@ -64,8 +64,19 @@ restart)
         $0 start
 ;;
 
+reload)
+        printf "%-50s" "Reloading $NAME"
+        touch $RELOAD_FILE
+        if [ -f $RELOAD_SUCCESS ]; then
+                printf "%s\n" "Ok"
+        else
+                printf "%s\n" "there was an error"
+                cat $RELOAD_FAIL
+        fi
+;;
+
 *)
-        echo "Usage: $0 {status|start|stop|restart}"
+        echo "Usage: $0 {status|reload|start|stop|restart}"
         exit 1
 esac
 

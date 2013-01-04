@@ -37,6 +37,9 @@ log "Installing aiCache"
 
   # Install aiCache default config
   template "/etc/aicache/aicache.cfg" do
+    owner "aicache"
+    group "aicache"
+    mode "755"
     source "default_config.cfg.erb"
   end
   
