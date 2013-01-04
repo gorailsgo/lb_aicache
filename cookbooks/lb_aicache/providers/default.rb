@@ -50,7 +50,7 @@ log "Installing aiCache"
 
   # Install aiCache default config
   template "/etc/aicache/aicache.cfg" do
-    source "default_config.cfg.erb"
+    source "aicache.cfg.default.erb"
     cookbook "lb_aicache"
     owner "aicache"
     notifies :restart, resources(:service => "aicache")
