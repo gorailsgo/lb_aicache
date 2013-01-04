@@ -117,11 +117,11 @@ log "Installing aiCache"
 end
 
 
-action :add_vhost do
+action :add_origin do
 
   pool_name = new_resource.pool_name
 
-  # Creates the directory for vhost server files.
+  # Creates the directory for origin server files.
   directory "/etc/aicache/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
     owner "aicache"
     group "aicache"

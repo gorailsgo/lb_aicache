@@ -39,6 +39,26 @@ log "Installing aiCache"
   template "/etc/aicache/aicache.cfg" do
     source "default_config.cfg.erb"
   end
+  
+  # Create reload files for aicache 
+  file "/usr/local/aicache/reload" do
+    owner "aicache"
+    group "aicache"
+    mode "600"
+    action :create_if_missing
+  end
+  file "/usr/local/aicache/reload_success" do
+    owner "aicache"
+    group "aicache"
+    mode "600"
+    action :create_if_missing
+  end
+  file "/usr/local/aicache/reload_fail" do
+    owner "aicache"
+    group "aicache"
+    mode "600"
+    action :create_if_missing
+  end
 
   # Install aiCache start/stop/restart script
   template "/etc/init.d/aicache" do

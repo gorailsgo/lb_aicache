@@ -48,6 +48,12 @@ alert_email root@localhost       # Requered for rightscale alerts
 #block_ip_max_req 100
 #silent_block_ip
 
+# Reload configuration files for aiCache
+# DO NOT MODIFY, if modified then "/etc/init.d/aicache reload" WILL NOT WORK
+reload_watch_file /usr/local/aicache/reload
+reload_success_file /usr/local/aicache/reload_success
+reload_fail_file /usr/local/aicache/reload_fail
+
 
 #########################################################################################################
 # Website

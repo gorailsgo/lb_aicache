@@ -11,7 +11,7 @@ define :lb_aicache_backend, :pool_name => "" do
   health_uri = "healthcheck #{node[:lb][:health_check_uri]}" unless "#{node[:lb][:health_check_uri]}".empty?
   health_chk = "HTTP 10 8" unless "#{node[:lb][:health_check_uri]}".empty?
 
-  # Creates backend aicache files for the vhost it will answer for.
+  # Creates backend aicache files for the origin it will answer for.
   template ::File.join("/etc/aicache/#{node[:lb][:service][:provider]}.d", "backend_#{params[:pool_name]}.conf") do
     source "aicache_backend.erb"
     cookbook 'lb_aicache'
