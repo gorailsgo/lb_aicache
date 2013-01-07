@@ -48,12 +48,24 @@ log "Installing aiCache"
     action :create
   end
 
-  # Install aiCache default config
-  template "/etc/aicache/aicache.cfg" do
-    source "aicache.cfg.default.erb"
-    cookbook "lb_aicache"
+  # Create reload files for aicache
+  file "/usr/local/aicache/reload" do
     owner "aicache"
-    notifies :restart, resources(:service => "aicache")
+    group "aicache"
+    mode "600"
+    action :create_if_missing
+  end
+  file "/usr/local/aicache/reload_success" do
+    owner "aicache"
+    group "aicache"
+    mode "600"
+    action :create_if_missing
+  end
+  file "/usr/local/aicache/reload_fail" do
+    owner "aicache"
+    group "aicache"
+    mode "600"
+    action :create_if_missing
   end
 
   # Install aiCache start/stop/restart script
@@ -65,6 +77,14 @@ log "Installing aiCache"
   service "aicache" do
     supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
     action :enable
+  end
+
+  # Install aiCache default config
+  template "/etc/aicache/aicache.cfg" do
+    source "aicache.cfg.default.erb"
+    cookbook "lb_aicache"
+    owner "aicache"
+    notifies :restart, resources(:service => "aicache")
   end
 
   # Installs script that concatenates individual server files after the aicache
@@ -181,7 +201,7 @@ action :attach do
     action :nothing
   end
 
-  # Creates the directory for vhost server files.
+  # Creates the directory for origin server files.
   directory "/etc/aicache/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
     owner "aicache"
     group "aicache"
