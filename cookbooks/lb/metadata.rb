@@ -24,7 +24,7 @@ recipe "lb::do_attach_request", "Sends request to all servers with loadbalancer:
 recipe "lb::do_detach_request", "Sends request to all servers with loadbalancer:<pool_name>=lb tag to detach the current server from the listener pool. This should be run by an application server at decommission."
 #recipe "lb::setup_reverse_proxy_config", "Configures Apache reverse proxy."
 #recipe "lb::setup_monitoring", "Installs the load balancer collectd plugin for monitoring support."
-recipe "lb::setup_advanced_configuration", "recipe for advanced load balancer configuration"
+#recipe "lb::setup_advanced_configuration", "recipe for advanced load balancer configuration"
 
 attribute "lb/pools",
   :display_name => "Load Balance Pools",
@@ -96,7 +96,7 @@ attribute "lb/health_check_uri",
 
 #attribute "lb/service/provider",
 #  :display_name => "Load Balance Provider",
-#  :description => "Specify the load balance provider to use: either 'lb_aicache' for aiCache, 'lb_elb' for AWS Load Balancing, or 'lb_clb' for Rackspace Cloud Load Balancing. Example: lb_haproxy",
+#  :description => "Specify the load balance provider to use: either 'lb_aicache' for aiCache, 'lb_elb' for AWS Load Balancing, or 'lb_clb' for Rackspace Cloud Load Balancing. Example: lb_aicache",
 #  :required => "recommended",
 #  :default => "lb_aicache",
 #  :choice => ["lb_aicache", "lb_clb", "lb_elb"],
