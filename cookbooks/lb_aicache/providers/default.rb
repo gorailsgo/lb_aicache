@@ -86,6 +86,8 @@ log "Installing aiCache"
     owner "aicache"
     notifies :restart, resources(:service => "aicache")
   end
+######################### tested until this line #########################
+
 
   # Installs script that concatenates individual server files after the aicache
   # config head into the aicache config.
@@ -137,11 +139,11 @@ log "Installing aiCache"
 end
 
 
-action :add_origin do
+action :add_vhost do
 
   pool_name = new_resource.pool_name
 
-  # Creates the directory for origin server files.
+  # Creates the directory for vhost server files.
   directory "/etc/aicache/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
     owner "aicache"
     group "aicache"
@@ -170,7 +172,7 @@ action :add_origin do
   end
 
   # Calls the "advanced_configs" action.
-  action_advanced_configs
+#  action_advanced_configs
 
   # (Re)generates the aicache config file.
   execute "/etc/aicache/aicache-cat.sh" do
@@ -181,7 +183,7 @@ action :add_origin do
     notifies :reload, resources(:service => "aicache")
   end
 
-  # Tags this server as a load balancer for vhost it will answer for so app servers
+  # Tags this server as a load balancer for vhosts it will answer for so app servers
   # can send requests to it.
   # See http://support.rightscale.com/12-Guides/Chef_Cookbooks_Developer_Guide/Chef_Resources#RightLinkTag for the "right_link_tag" resource.
   right_link_tag "loadbalancer:#{pool_name}=lb"
@@ -201,7 +203,7 @@ action :attach do
     action :nothing
   end
 
-  # Creates the directory for origin server files.
+  # Creates the directory for vhost server files.
   directory "/etc/aicache/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
     owner "aicache"
     group "aicache"
