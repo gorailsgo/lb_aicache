@@ -1,35 +1,90 @@
 # 
-# Cookbook Name:: lb_haproxy
+# Cookbook Name:: lb_aicache
 #
-# Copyright RightScale, Inc. All rights reserved.  All access and use subject to the
-# RightScale Terms of Service available at http://www.rightscale.com/terms.php and,
-# if applicable, other agreements such as a RightScale Master Subscription Agreement.
 
 #
-# File created by RightScale
+# File created by aicache
 # DO NOT EDIT
 #
 
-global
-        <%= @stats_file_line %>
-        log /dev/log syslog info
-        maxconn 4096
-        ulimit-n 8250
-        chroot /etc/haproxy
-        user haproxy
-        group haproxy
-        daemon
-        quiet
-        pidfile haproxy.pid
+#########################################################################################################
+# aiCache Configuration file template
+#########################################################################################################
+#
+server # DON'T REMOVE OR MODIFY THIS LINE
+#
+server_ip *                      # DEFAULT: we listen on all IPs/NICs defined on this host
+server_port 80                   # DEFAULT: we run on default HTTP port 80
 
-defaults
-        log     global
-        mode    http
-        option  httplog
-        option  dontlognull
-        retries 3
-        option  redispatch
-        maxconn 2000
-        contimeout        5000
-        timeout client <%= @timeout_client %>
+if_name eth0                     # MUST POINT TO VALID Interface name that you used to obtain the license
+
+username aicache                 # Will run as this user, must be a valid user
+groupname aicache                # Will run as this group, must be a valid group
+
+logdirectory /var/log/aicache    # Log directory: access, error, stats, snmp.stat go there
+stay_up_on_write_error           # When set, server will continue to service requests even when it runs
+                                 # out of space in log partition (directory).
+drop_user_agent                  # Do not log user-agent information
+log_healthcheck                  # Will log health check requests
+logstats                         # Log global statistics
+max_log_file_size 100000000      # Auto-rotate logs when it grows above 100 Mb
+
+maxkeepalivereq 20               # Max # of keep-alive requests per client keep-alive connection
+maxkeepalivetime 10              # Max lifespan of client keep-alive connection, seconds
+maxclientidletime 4              # Max idle time of client keep-alive connection, seconds
+maxosidletime 4                  # Origin Server connection max idle time
+
+snmp_stat_interval 4             # SNMP stats refresh interval, seconds
+
+max_os_ka_conn 2                 # Max number of origin server keep-alive connections, per origin server
+max_os_ka_req 20                 # Max number of origin server requests per os keep-alive connection
+
+<%= @stats_file_line %>
+
+# Alerts
+alert_req_sec_max 2500           # Max number of requests per second, more will generate alert
+alert_req_sec_min 0              # Min number of requests per second, less will generate alert
+alert_bad_resp_sec 2             # Max bad responses (404, 500, etc...) from origin servers per second
+alert_os_rt 200                  # Alert on origin response time (miliseconds)
+
+alert_dir /usr/local/aicache/alerts # Required for rightscale alerts
+alert_email root@localhost       # Requered for rightscale alerts
+
+# Uncomment following lines if you want to use aiCache to block DDOS attack
+#clip_throttle                   # Enable clip throttle
+#block_ip_interval 10
+#block_ip_max_req 100
+#silent_block_ip
+
+
+#########################################################################################################
+# Website
+#########################################################################################################
+#
+website  # DON'T REMOVE OR MODIFY THIS LINE
+#
+
+
+#global
+#        <%= @stats_file_line %>
+#        log /dev/log syslog info
+#        maxconn 4096
+#        ulimit-n 8250
+#        chroot /etc/haproxy
+#        user haproxy
+#        group haproxy
+#        daemon
+#        quiet
+#        pidfile haproxy.pid
+
+#defaults
+#        log     global
+#        mode    http
+#        option  httplog
+#        option  dontlognull
+#        retries 3
+#        option  redispatch
+#        maxconn 2000
+#        contimeout        5000
+#        timeout client <%= @timeout_client %>
 

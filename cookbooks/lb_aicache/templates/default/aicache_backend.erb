@@ -1,22 +1,59 @@
-backend <%= @backend_name_line %>
 
-        mode http
-        balance <%= @algorithm %>
+hostname <%= @backend_name_line %>             # MUST CHANGE to your own hostname
+cname EC2_PUBLIC_HOSTNAME        # Will be replaced with EC2 instance public hostname. Useful for quick testing
+
+min_gzip_size 4000               # Will compress compressible responses over 4000 bytes in size
+fallback                         # Will fall back to prev cached response if new one can not be obtained
+logstats                         # Will log basic website stats to a dedicated stats log file
+
+healthcheck / HTTP 10 7  # Will request /test.html every 5 seconds, match response to "HTTP", timeout 4 seconds
+
+#########################################################################################################
+# HTTP Headers. Do not modify without a very good reason.
+#########################################################################################################
+httpheaderder Connection keep-alive
+httpheader Accept */*
+httpheader Accept-Encoding gzip
+
+#########################################################################################################
+# Patterns: this is what sets up Time-to-Live (caching rules)
+#########################################################################################################
+pattern /$      regexp 1m        # cache for 1 minute: "/", "/news/" etc
+pattern \.html$ regexp 1m        # cache for 1 minute
+#pattern \.jsp  regexp 1m        # cache for 1 minute - dynamic content, must use caution
+#pattern \.php  regexp 1m        # cache for 1 minute - must use caution
+#pattern \.asp  regexp 1m        # cache for 1 minute - must use caution
+#pattern \.asx  regexp 1m        # cache for 1 minute - must use caution
+pattern .js   simple 7d no_log   # cache for a week, do not log in acces log file
+pattern .css  simple 7d no_log   # cache for a week, do not log in acces log file
+pattern .jpg  simple 7d no_log   # cache for a week, do not log in acces log file
+pattern .gif  simple 7d no_log   # cache for a week, do not log in acces log file
+pattern .png  simple 7d no_log   # cache for a week, do not log in acces log file
+
+#########################################################################################################
+# Origins. At least one must be defined
+#########################################################################################################
+origin 1.2.3.4 80          # origin server ip
+
+#backend <%= @backend_name_line %>
+
+#        mode http
+#        balance <%= @algorithm %>
         
         # Timeout
-        timeout server <%= @timeout_server %>
+#        timeout server <%= @timeout_server %>
 
         # Haproxy status page
-        <%= @stats_uri_line %>
-        <%= @stats_auth_line %>
+#        <%= @stats_uri_line %>
+#        <%= @stats_auth_line %>
 
         # when cookie persistence is required
-        cookie SERVERID insert indirect nocache
+#        cookie SERVERID insert indirect nocache
 
         # When internal servers support a status page
-        <%= @health_uri_line %>
-        <%= @health_check_line %>
+#        <%= @health_uri_line %>
+#        <%= @health_check_line %>
 
         # Special server line that allow HAProxy to start with cookies enabled and no valid servers.
-        server disabled-server 127.0.0.1:1 disabled
+#        server disabled-server 127.0.0.1:1 disabled
 

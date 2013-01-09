@@ -5,7 +5,7 @@
 define :lb_aicache_backend, :pool_name => "" do
 
   backend_name = params[:pool_name] + "_backend"
-  stats_uri = "stat url #{node[:lb][:stats_uri]}" unless "#{node[:lb][:stats_uri]}".empty?
+  stats_uri = "stat_url #{node[:lb][:stats_uri]}" unless "#{node[:lb][:stats_uri]}".empty?
 #  stats_auth = "stats auth #{node[:lb][:stats_user]}:#{node[:lb][:stats_password]}" unless \
               "#{node[:lb][:stats_user]}".empty? || "#{node[:lb][:stats_password]}".empty?
   health_uri = "healthcheck #{node[:lb][:health_check_uri]}" unless "#{node[:lb][:health_check_uri]}".empty?
@@ -19,14 +19,14 @@ define :lb_aicache_backend, :pool_name => "" do
     group "aicache"
     mode "0400"
     backup false
-    variables(
-      :backend_name_line => backend_name,
-      :stats_uri_line => stats_uri,
+#    variables(
+#      :backend_name_line => backend_name,
+#      :stats_uri_line => stats_uri,
 #      :stats_auth_line => stats_auth,
-      :health_uri_line => health_uri,
-      :health_check_line => health_chk,
-      :algorithm => node[:lb_aicache][:algorithm],
-      :timeout_server => node[:lb_aicache][:timeout_server]
-    )
+#      :health_uri_line => health_uri,
+#      :health_check_line => health_chk,
+#      :algorithm => node[:lb_aicache][:algorithm],
+#      :timeout_server => node[:lb_aicache][:timeout_server]
+#    )
   end
 end
