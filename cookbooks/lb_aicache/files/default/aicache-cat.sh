@@ -13,7 +13,7 @@ CONF_FILE=/etc/aicache/aicache.cfg
 
 cat /etc/aicache/aicache.cfg.head > ${CONF_FILE}
 
-echo "frontend all_requests 127.0.0.1:85" >> ${CONF_FILE}
+#echo "frontend all_requests 127.0.0.1:85" >> ${CONF_FILE}
 
 pools=""
 

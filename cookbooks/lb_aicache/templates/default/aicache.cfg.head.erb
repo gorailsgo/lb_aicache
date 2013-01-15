@@ -56,6 +56,13 @@ alert_email root@localhost       # Requered for rightscale alerts
 #block_ip_max_req 100
 #silent_block_ip
 
+#        timeout client <%= @timeout_client %>
+
+# Reload configuration files for aiCache
+# DO NOT MODIFY, if modified then "/etc/init.d/aicache reload" WILL NOT WORK
+reload_watch_file /usr/local/aicache/reload
+reload_success_file /usr/local/aicache/reload_success
+reload_fail_file /usr/local/aicache/reload_fail
 
 #########################################################################################################
 # Website
@@ -63,28 +70,4 @@ alert_email root@localhost       # Requered for rightscale alerts
 #
 website  # DON'T REMOVE OR MODIFY THIS LINE
 #
-
-
-#global
-#        <%= @stats_file_line %>
-#        log /dev/log syslog info
-#        maxconn 4096
-#        ulimit-n 8250
-#        chroot /etc/haproxy
-#        user haproxy
-#        group haproxy
-#        daemon
-#        quiet
-#        pidfile haproxy.pid
-
-#defaults
-#        log     global
-#        mode    http
-#        option  httplog
-#        option  dontlognull
-#        retries 3
-#        option  redispatch
-#        maxconn 2000
-#        contimeout        5000
-#        timeout client <%= @timeout_client %>
 
