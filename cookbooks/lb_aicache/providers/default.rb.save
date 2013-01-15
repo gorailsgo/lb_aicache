@@ -34,7 +34,7 @@ log "Installing aiCache"
   directory "/etc/aicache" do
     owner "aicache"
     group "aicache"
-    mode "0755"
+    mode 0755
     recursive true
     action :create
   end
@@ -43,7 +43,7 @@ log "Installing aiCache"
   directory "/etc/aicache/#{node[:lb][:service][:provider]}.d" do
     owner "aicache"
     group "aicache"
-    mode "0755"
+    mode 0755
     recursive true
     action :create
   end
@@ -72,7 +72,6 @@ log "Installing aiCache"
   template "/etc/init.d/aicache" do
     source "aicache_restart.sh.erb"
     mode "0755"
-    cookbook "lb_aicache"
   end
 
   service "aicache" do
@@ -95,7 +94,7 @@ log "Installing aiCache"
   cookbook_file "/etc/aicache/aicache-cat.sh" do
     owner "aicache"
     group "aicache"
-    mode "0755"
+    mode 0755
     source "aicache-cat.sh"
     cookbook "lb_aicache"
   end
@@ -110,7 +109,7 @@ log "Installing aiCache"
     mode "0400"
     stats_file="/var/log/aicache/stats-global user aicache group aicache"
     variables(
-      :stats_file_line => stats_file
+      :stats_file_line => stats_file,
 #      :timeout_client => node[:lb_haproxy][:timeout_client]
     )
   end
@@ -132,9 +131,9 @@ log "Installing aiCache"
 
   # Generates the aicache config file.
   execute "/etc/aicache/aicache-cat.sh" do
-    owner "aicache"
+    user "aicache"
     group "aicache"
-    umask "0077"
+    umask 0077
     notifies :start, resources(:service => "aicache")
   end
 end
@@ -148,7 +147,7 @@ action :add_vhost do
   directory "/etc/aicache/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
     owner "aicache"
     group "aicache"
-    mode "0755"
+    mode 0755
     recursive true
     action :create
   end
@@ -158,7 +157,7 @@ action :add_vhost do
      source "aicache_backend_list.erb"
      owner "aicache"
      group "aicache"
-     mode "0600"
+     mode 0600
      backup false
      cookbook "lb_aicache"
      variables(
@@ -177,9 +176,9 @@ action :add_vhost do
 
   # (Re)generates the aicache config file.
   execute "/etc/aicache/aicache-cat.sh" do
-    owner "aicache"
+    user "aicache"
     group "aicache"
-    umask "0077"
+    umask 0077
     action :run
     notifies :reload, resources(:service => "aicache")
   end
@@ -208,7 +207,7 @@ action :attach do
   directory "/etc/aicache/#{node[:lb][:service][:provider]}.d/#{pool_name}" do
     owner "aicache"
     group "aicache"
-    mode "0755"
+    mode 0755
     recursive true
     action :create
   end
@@ -217,7 +216,7 @@ action :attach do
   execute "/etc/aicache/aicache-cat.sh" do
     user "aicache"
     group "aicache"
-    umask "0077"
+    umask 0077
     action :nothing
     notifies :reload, resources(:service => "aicache")
   end
@@ -227,7 +226,7 @@ action :attach do
     source "aicache_server.erb"
     owner "aicache"
     group "aicache"
-    mode "0600"
+    mode 0600
     backup false
     cookbook "lb_aicache"
     variables(
@@ -259,34 +258,34 @@ action :advanced_configs do
   # RESULT EXAMPLE
   # acl url_serverid  path_beg    /serverid
   # acl ns-ss-db1-test-rightscale-com_acl  hdr_dom(host) -i ns-ss-db1.test.rightscale.com
-#  template "/etc/aicache/#{node[:lb][:service][:provider]}.d/acl_#{pool_name}.conf" do
-#     source "aicache_backend_acl.erb"
-#     owner "aicache"
-#     group "aicache"
-#     mode 0600
-#     backup false
-#     cookbook "lb_aicache"
-#     variables(
-#       :pool_name => pool_name,
-#       :pool_name_full => pool_name_full
-#     )
-#  end
+  template "/etc/aicache/#{node[:lb][:service][:provider]}.d/acl_#{pool_name}.conf" do
+     source "aicache_backend_acl.erb"
+     owner "aicache"
+     group "aicache"
+     mode 0600
+     backup false
+     cookbook "lb_aicache"
+     variables(
+       :pool_name => pool_name,
+       :pool_name_full => pool_name_full
+     )
+  end
 
   # Template to generate acl sections for aicache config file
   # RESULT EXAMPLE
   # use_backend 2_backend if url_serverid
-#  template "/etc/aicache/#{node[:lb][:service][:provider]}.d/use_backend_#{pool_name}.conf" do
-#    source "aicache_backend_use.erb"
-#    owner "aicache"
-#    group "aicache"
-#    mode 0600
-#    backup false
-#    cookbook "lb_aicache"
-#    variables(
-#      :pool_name => pool_name,
-#      :pool_name_full => pool_name_full
-#    )
-#  end
+  template "/etc/aicache/#{node[:lb][:service][:provider]}.d/use_backend_#{pool_name}.conf" do
+    source "aicache_backend_use.erb"
+    owner "aicache"
+    group "aicache"
+    mode 0600
+    backup false
+    cookbook "lb_aicache"
+    variables(
+      :pool_name => pool_name,
+      :pool_name_full => pool_name_full
+    )
+  end
 
 end
 
@@ -328,9 +327,9 @@ action :detach do
 
   # (Re)generates the aicache config file.
   execute "/etc/aicache/aicache-cat.sh" do
-    owner "aicache"
+    user "aicache"
     group "aicache"
-    umask "0077"
+    umask 0077
     action :nothing
     notifies :reload, resources(:service => "aicache")
   end
