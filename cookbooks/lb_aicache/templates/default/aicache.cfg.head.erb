@@ -40,6 +40,7 @@ max_os_ka_conn 2                 # Max number of origin server keep-alive connec
 max_os_ka_req 20                 # Max number of origin server requests per os keep-alive connection
 
 <%= @stats_file_line %>
+#        timeout client <%= @timeout_client %>
 
 # Alerts
 alert_req_sec_max 2500           # Max number of requests per second, more will generate alert
@@ -56,7 +57,6 @@ alert_email root@localhost       # Requered for rightscale alerts
 #block_ip_max_req 100
 #silent_block_ip
 
-#        timeout client <%= @timeout_client %>
 
 # Reload configuration files for aiCache
 # DO NOT MODIFY, if modified then "/etc/init.d/aicache reload" WILL NOT WORK

@@ -24,28 +24,28 @@ done
 
 echo "" >> ${CONF_FILE}
 
-for single_pool in ${pools}
-do
-  if [ -e /etc/aicache/lb_aicache.d/acl_${single_pool}.conf ]; then
-    cat "/etc/aicache/lb_aicache.d/acl_${single_pool}.conf" >> ${CONF_FILE}
-  fi
-done
+#for single_pool in ${pools}
+#do
+#  if [ -e /etc/aicache/lb_aicache.d/acl_${single_pool}.conf ]; then
+#    cat "/etc/aicache/lb_aicache.d/acl_${single_pool}.conf" >> ${CONF_FILE}
+#  fi
+#done
 
-echo "" >> ${CONF_FILE}
+#echo "" >> ${CONF_FILE}
 
-for single_pool in ${pools}
-do
+#for single_pool in ${pools}
+#do
   # this will add advanced use_backend statements to config file
-  if [ -r  /etc/aicache/lb_aicache.d/use_backend_${single_pool}.conf ]; then
-    cat /etc/aicache/lb_aicache.d/use_backend_${single_pool}.conf>> ${CONF_FILE}
-  fi
-done
+#  if [ -r  /etc/aicache/lb_aicache.d/use_backend_${single_pool}.conf ]; then
+#    cat /etc/aicache/lb_aicache.d/use_backend_${single_pool}.conf>> ${CONF_FILE}
+#  fi
+#done
 
-echo "" >> ${CONF_FILE}
+#echo "" >> ${CONF_FILE}
 
-cat /etc/aicache/aicache.cfg.default_backend >> ${CONF_FILE}
+#cat /etc/aicache/aicache.cfg.default_backend >> ${CONF_FILE}
 
-echo "" >> ${CONF_FILE}
+#echo "" >> ${CONF_FILE}
 
 for single_pool in ${pools}
 do
