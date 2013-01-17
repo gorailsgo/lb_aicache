@@ -132,7 +132,7 @@ log "Installing aiCache"
 
   # Generates the aicache config file.
   execute "/etc/aicache/aicache-cat.sh" do
-    owner "aicache"
+    user "aicache"
     group "aicache"
     umask "0077"
     notifies :start, resources(:service => "aicache")
@@ -177,7 +177,7 @@ action :add_vhost do
 
   # (Re)generates the aicache config file.
   execute "/etc/aicache/aicache-cat.sh" do
-    owner "aicache"
+    user "aicache"
     group "aicache"
     umask "0077"
     action :run
@@ -328,7 +328,7 @@ action :detach do
 
   # (Re)generates the aicache config file.
   execute "/etc/aicache/aicache-cat.sh" do
-    owner "aicache"
+    user "aicache"
     group "aicache"
     umask "0077"
     action :nothing
