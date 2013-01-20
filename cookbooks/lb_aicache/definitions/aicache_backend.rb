@@ -19,14 +19,14 @@ define :lb_aicache_backend, :pool_name => "" do
     group "aicache"
     mode "0400"
     backup false
-#    variables(
-#      :backend_name_line => backend_name,
-#      :stats_uri_line => stats_uri,
+    variables(
+      :backend_name_line => backend_name,
+      :stats_uri_line => stats_uri,
 #      :stats_auth_line => stats_auth,
-#      :health_uri_line => health_uri,
-#      :health_check_line => health_chk,
+      :health_uri_line => health_uri,
+      :health_check_line => health_chk
 #      :algorithm => node[:lb_aicache][:algorithm],
 #      :timeout_server => node[:lb_aicache][:timeout_server]
-#    )
+    )
   end
 end

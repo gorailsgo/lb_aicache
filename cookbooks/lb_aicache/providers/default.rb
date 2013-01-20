@@ -108,11 +108,11 @@ log "Installing aiCache"
     owner "aicache"
     group "aicache"
     mode "0400"
-    stats_file="/var/log/aicache/stats-global user aicache group aicache"
-    variables(
-      :stats_file_line => stats_file
+#    stats_file="/var/log/aicache/stats-global user aicache group aicache"
+#    variables(
+#      :stats_file_line => stats_file
 #      :timeout_client => node[:lb_haproxy][:timeout_client]
-    )
+#    )
   end
 
 
