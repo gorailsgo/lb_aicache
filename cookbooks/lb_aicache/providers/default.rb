@@ -87,8 +87,6 @@ log "Installing aiCache"
     owner "aicache"
     notifies :restart, resources(:service => "aicache")
   end
-######################### tested until this line #########################
-
 
   # Installs script that concatenates individual server files after the aicache
   # config head into the aicache config.
@@ -109,28 +107,10 @@ log "Installing aiCache"
     group "aicache"
     mode "0400"
     stats_uri_line = "stat_url #{node[:lb][:stats_uri]}" unless "#{node[:lb][:stats_uri]}".empty?
-    #stats_file="/var/log/aicache/stats-global user aicache group aicache"
     variables(
        :stats_uri => stats_uri_line
-#      :stats_file_line => stats_file
-#      :timeout_client => node[:lb_haproxy][:timeout_client]
     )
   end
-
-
-  # Installs the aicache config backend which is the part of the aicache config
-  # that doesn't change.
-#  template "/etc/aicache/aicache.cfg.default_backend" do
-#    source "aicache.cfg.default_backend.erb"
-#    cookbook "lb_aicache"
-#    owner "aicache"
-#    group "aicache"
-#    mode "0400"
-#    backup false
-#    variables(
-#      :default_backend_line => "#{new_resource.pool_name}_backend"
-#    )
-#  end
 
   # Generates the aicache config file.
   execute "/etc/aicache/aicache-cat.sh" do
@@ -140,7 +120,6 @@ log "Installing aiCache"
     notifies :start, resources(:service => "aicache")
   end
 end
-
 
 action :add_vhost do
 
@@ -244,55 +223,6 @@ action :attach do
   end
 end
 
-action :advanced_configs do
-
-  # Creates aicache service.
-  service "aicache" do
-    supports :reload => true, :restart => true, :status => true, :start => true, :stop => true
-    action :nothing
-  end
-
-  pool_name = new_resource.pool_name
-  pool_name_full =  new_resource.pool_name_full
-  log "  Current pool name is #{pool_name}"
-  log "  Current FULL pool name is #{pool_name_full}"
-
-  # Template to generate acl sections for aicache config file
-  # RESULT EXAMPLE
-  # acl url_serverid  path_beg    /serverid
-  # acl ns-ss-db1-test-rightscale-com_acl  hdr_dom(host) -i ns-ss-db1.test.rightscale.com
-#  template "/etc/aicache/#{node[:lb][:service][:provider]}.d/acl_#{pool_name}.conf" do
-#     source "aicache_backend_acl.erb"
-#     owner "aicache"
-#     group "aicache"
-#     mode 0600
-#     backup false
-#     cookbook "lb_aicache"
-#     variables(
-#       :pool_name => pool_name,
-#       :pool_name_full => pool_name_full
-#     )
-#  end
-
-  # Template to generate acl sections for aicache config file
-  # RESULT EXAMPLE
-  # use_backend 2_backend if url_serverid
-#  template "/etc/aicache/#{node[:lb][:service][:provider]}.d/use_backend_#{pool_name}.conf" do
-#    source "aicache_backend_use.erb"
-#    owner "aicache"
-#    group "aicache"
-#    mode 0600
-#    backup false
-#    cookbook "lb_aicache"
-#    variables(
-#      :pool_name => pool_name,
-#      :pool_name_full => pool_name_full
-#    )
-#  end
-
-end
-
-
 action :attach_request do
 
   pool_name = new_resource.pool_name
@@ -372,34 +302,13 @@ action :setup_monitoring do
   log "  Setup monitoring for aicache"
 
   # Installs the aicache collectd script into the collectd library plugins directory.
-#  cookbook_file(::File.join(node[:rightscale][:collectd_lib], "plugins", "aicache")) do
-#    source "aicache1.4.rb"
-#    cookbook "lb_aicache"
-#    mode "0755"
-#  end
-
-  # Adds a collectd config file for the aicache collectd script with the exec plugin and restart collectd if necessary.
-#  template ::File.join(node[:rightscale][:collectd_plugin_dir], "aicache.conf") do
-#    backup false
-#    source "aicache_collectd_exec.erb"
-#    notifies :restart, resources(:service => "collectd")
-#    cookbook "lb_aicache"
-#  end
-
-#  ruby_block "add_collectd_gauges" do
-#    block do
-#      types_file = ::File.join(node[:rightscale][:collectd_share], "types.db")
-#      typesdb = IO.read(types_file)
-#      unless typesdb.include?("gague-age") && typesdb.include?("aicache_sessions")
-#        typesdb += <<-EOS
-#          aicache_sessions current_queued:GAUGE:0:65535, current_session:GAUGE:0:65535
-#          aicache_traffic cumulative_requests:COUNTER:0:200000000, response_errors:COUNTER:0:200000000, health_check_errors:COUNTER:0:200000000
-#          aicache_status status:GAUGE:-255:255
-#        EOS
-#        ::File.open(types_file, "w") { |f| f.write(typesdb) }
-#      end
-#    end
-#  end
+  cookbook_file "/etc/aicache/aicache_collectd.sh" do
+    owner "aicache"
+    group "aicache"
+    mode "0755"
+    source "aicache_collectd.sh"
+    cookbook "lb_aicache"
+  end
 
 end
 
