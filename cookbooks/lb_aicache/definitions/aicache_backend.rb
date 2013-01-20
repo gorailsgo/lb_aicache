@@ -4,7 +4,7 @@
 
 define :lb_aicache_backend, :pool_name => "" do
 
-  backend_name = params[:pool_name] + "_backend"
+  backend_name = params[:pool_name]
   stats_uri = "stat_url #{node[:lb][:stats_uri]}" unless "#{node[:lb][:stats_uri]}".empty?
 #  stats_auth = "stats auth #{node[:lb][:stats_user]}:#{node[:lb][:stats_password]}" unless \
               "#{node[:lb][:stats_user]}".empty? || "#{node[:lb][:stats_password]}".empty?

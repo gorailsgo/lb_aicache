@@ -39,8 +39,7 @@ snmp_stat_interval 4             # SNMP stats refresh interval, seconds
 max_os_ka_conn 2                 # Max number of origin server keep-alive connections, per origin server
 max_os_ka_req 20                 # Max number of origin server requests per os keep-alive connection
 
-<%= @stats_file_line %>
-#        timeout client <%= @timeout_client %>
+<%= @stats_uri %>
 
 # Alerts
 alert_req_sec_max 2500           # Max number of requests per second, more will generate alert

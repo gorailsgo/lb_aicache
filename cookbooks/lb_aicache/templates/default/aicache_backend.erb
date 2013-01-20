@@ -1,4 +1,4 @@
-
+#####################  configuration for <%= @backend_name_line %> ###################
 hostname <%= @backend_name_line %>             # MUST CHANGE to your own hostname
 cname EC2_PUBLIC_HOSTNAME        # Will be replaced with EC2 instance public hostname. Useful for quick testing
 
@@ -6,7 +6,7 @@ min_gzip_size 4000               # Will compress compressible responses over 400
 fallback                         # Will fall back to prev cached response if new one can not be obtained
 logstats                         # Will log basic website stats to a dedicated stats log file
 
-healthcheck / HTTP 10 7  # Will request /test.html every 5 seconds, match response to "HTTP", timeout 4 seconds
+<%= @health_uri_line %> <%= @health_check_line %>  # Will request /test.html every 5 seconds, match response to "HTTP", timeout 4 seconds
 
 #########################################################################################################
 # HTTP Headers. Do not modify without a very good reason.
