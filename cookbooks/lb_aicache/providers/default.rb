@@ -214,10 +214,7 @@ action :attach do
     variables(
       :backend_name => new_resource.backend_id,
       :backend_ip => new_resource.backend_ip,
-      :backend_port => new_resource.backend_port,
-      :max_conn_per_server => node[:lb][:max_conn_per_server],
-      :session_sticky => new_resource.session_sticky,
-      :health_check_uri => node[:lb][:health_check_uri]
+      :backend_port => new_resource.backend_port
     )
     notifies :run, resources(:execute => "/etc/aicache/aicache-cat.sh")
   end
