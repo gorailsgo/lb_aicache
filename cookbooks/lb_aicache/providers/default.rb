@@ -32,6 +32,7 @@ log "Installing aiCache"
     ./install.sh
     mv $aiInstallDir/aicache_https $aiInstallDir/aicache
     chmod +x $aiInstallDir/*.sh
+    chmod +x $aiInstallDir/*.pl
     EOH
   end
 

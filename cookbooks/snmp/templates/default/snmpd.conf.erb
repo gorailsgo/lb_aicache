@@ -20,6 +20,10 @@
 com2sec notConfigUser  default       <%= node['snmp']['community'] %>
 
 ####
+# added for aiCache SNMP support
+com2sec readonly  default         <%= node['snmp']['community'] %>
+
+####
 # Second, map the security name into a group name:
 
 #       groupName      securityModel securityName
@@ -36,6 +40,9 @@ view    systemview    included   .1
 <% end %>
 view    systemview    included   .1.3.6.1.2.1.1
 view    systemview    included   .1.3.6.1.2.1.25.1.1
+### aiCache OID
+view   systemonly  included   .1.3.6.1.4.1.9999
+
 
 ####
 # Finally, grant the group read-only access to the systemview view.
@@ -56,6 +63,9 @@ syslocation <%= node['snmp']['syslocationVirtual'] %>
 syslocation <%= node['snmp']['syslocationPhysical'] %>
 <% end %>
 syscontact <%= node['snmp']['syscontact'] %>
+
+### aiCache support
+pass .1.3.6.1.4.1.9999 /usr/local/aicache/snmp.pl
 
 # Added for support of bcm5820 cards.
 pass .1.3.6.1.4.1.4413.4.1 /usr/bin/ucd5820stat
