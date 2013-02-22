@@ -13,6 +13,11 @@ log "Installing aiCache"
     action :install
   end
 
+  # Assure that there is postfix installed for alerts
+  package "postfix" do
+    action :install
+  end
+
   # Install aiCache software.
   bash "install_aicache" do
     user "root"
