@@ -28,6 +28,7 @@ start)
         ulimit -c 104857600
         ulimit -n 65535
         $DAEMON_FULL $DAEMONOPTS
+        pkill -f /usr/local/aicache/alert.pl > /dev/null 2>&1
         nohup /usr/local/aicache/alert.pl > /dev/null 2>&1 &
         PID=`pgrep -f $DAEMON_FULL`
         if [ -z $PID ]; then
