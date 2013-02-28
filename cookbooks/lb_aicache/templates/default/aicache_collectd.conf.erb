@@ -4,6 +4,6 @@
 
 LoadPlugin exec
 <Plugin exec>
-  Exec "aicache:aicache" "/usr/local/aicache/collectd_plugin.sh"
+  Exec "aicache:aicache" "/usr/local/aicache/collectd_plugin.sh" "<%= node[:rightscale][:instance_uuid] %>"
 </Plugin>
 

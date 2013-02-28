@@ -3,7 +3,7 @@
 # http://support.rightscale.com/12-Guides/RightScale_Methodologies/Monitoring_System/Writing_custom_collectd_plugins
 
 STATS_FILE="/var/log/aicache/stats-global"
-INSTANCE_ID=`cat /var/spool/ec2/meta-data/instance-id`
+INSTANCE_UUID=$1
 while sleep 10; do
         STATS=`tail --lines=1 $STATS_FILE`
         for STAT in $STATS; do
