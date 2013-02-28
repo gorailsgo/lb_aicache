@@ -321,7 +321,7 @@ action :setup_monitoring do
     cookbook "lb_aicache"
   end
 
- # Adds monitor.php file for aiCache monitoring
+ # Adds monitor file for aiCache monitoring
   cookbook_file "/usr/local/aicache/monitor" do
     owner "aicache"
     group "aicache"
