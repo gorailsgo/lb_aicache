@@ -305,7 +305,7 @@ action :setup_monitoring do
   log "  Setup monitoring for aicache"
 
   # Installs the aicache collectd script into the collectd library plugins directory.
-  cookbook_file "/usr/local/aicache/aicache_collectd.sh" do
+  cookbook_file "/usr/local/aicache/collectd_plugin.sh" do
     owner "aicache"
     group "aicache"
     mode "0755"
