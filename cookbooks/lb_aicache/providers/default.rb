@@ -305,12 +305,34 @@ action :setup_monitoring do
   log "  Setup monitoring for aicache"
 
   # Installs the aicache collectd script into the collectd library plugins directory.
-  cookbook_file "/etc/aicache/aicache_collectd.sh" do
+  cookbook_file "/usr/local/aicache/aicache_collectd.sh" do
     owner "aicache"
     group "aicache"
     mode "0755"
     source "aicache_collectd.sh"
     cookbook "lb_aicache"
+  end
+
+  # Adds a collectd config file for the aiCache collectd script with the exec plugin and restart collectd if necessary.
+  template ::File.join(node[:rightscale][:collectd_plugin_dir], "aicache.conf") do
+    backup false
+    source "aicache_collectd.conf.erb"
+    notifies :restart, resources(:service => "collectd")
+    cookbook "lb_aicache"
+  end
+
+ # Adds monitor.php file for aiCache monitoring
+  cookbook_file "/usr/local/aicache/monitor" do
+    owner "aicache"
+    group "aicache"
+    mode "0755"
+    source "aicache_monitor_exe"
+    cookbook "lb_aicache"
+  end
+ # Creates cron to run the monitoring file from above
+  cron "monitoring" do
+    minute "*/5"
+    command "cd /usr/local/aicache/;./monitor"
   end
 
 end

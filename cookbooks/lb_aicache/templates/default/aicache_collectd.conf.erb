@@ -1,0 +1,9 @@
+#
+# Cookbook Name:: lb_aicache
+#
+
+LoadPlugin exec
+<Plugin exec>
+  Exec "aicache:aicache" "/usr/local/aicache/collectd_plugin.sh"
+</Plugin>
+
